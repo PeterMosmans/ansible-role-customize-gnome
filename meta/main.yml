@@ -1,0 +1,22 @@
+galaxy_info:
+  author: Peter Mosmans
+  description: Customizes settings for a GNOME desktop, including shell extensions and fonts.
+  company: Go Forward
+  license: GPLv3
+  min_ansible_version: 1.2
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+    - name: Debian
+      versions:
+        - all
+  galaxy_tags:
+    - customization
+    - configuration
+    - desktop
+    - fonts
+    - gnome
+    - installation
+dependencies: []
+
