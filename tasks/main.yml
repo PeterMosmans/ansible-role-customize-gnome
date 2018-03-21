@@ -16,7 +16,7 @@
     owner: "{{ gnome_user }}"
     group: "{{ gnome_user }}"
     mode: 0644
-  with_items: "{{ gnome_files }}"
+  with_items: "{{ gnome_files|default([]) }}"
   tags:
     - files
 
@@ -24,7 +24,7 @@
   get_url:
     url: "{{ item.url }}"
     dest: "/tmp/{{ item.name }}.zip"
-  with_items: "{{ gnome_fonts }}"
+  with_items: "{{ gnome_fonts|default([]) }}"
   tags:
     - fonts
 
@@ -33,13 +33,13 @@
     src: "/tmp/{{ item.name }}.zip"
     dest: "/tmp/"
     remote_src: yes
-  with_items: "{{ gnome_fonts }}"
+  with_items: "{{ gnome_fonts|default([]) }}"
   tags:
     - fonts
 
 - name: Install fonts
   shell: mv /tmp/{{ item.fonts }} /usr/local/share/fonts/
-  with_items: "{{ gnome_fonts }}"
+  with_items: "{{ gnome_fonts|default([]) }}"
   tags:
     - fonts
 
@@ -52,7 +52,7 @@
   get_url:
     url: "{{ item.url }}"
     dest: "/tmp/{{ item.name }}.zip"
-  with_items: "{{ gnome_extensions }}"
+  with_items: "{{ gnome_extensions|default([]) }}"
   tags:
     - extensions
 
@@ -61,7 +61,7 @@
     path: /home/{{ gnome_user }}/.local/share/gnome-shell/extensions/{{ item.name }}
     state: directory
   become_user: "{{ gnome_user }}"
-  with_items: "{{ gnome_extensions }}"
+  with_items: "{{ gnome_extensions|default([]) }}"
   tags:
     - extensions
 
