@@ -10,9 +10,9 @@ None
 
 ## Role Variables
 
-| Variable        | Required | Default  | Description                                                                                                                                                                                                                |
-| --------------- | -------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `gnome_extension_ids`  | :heavy_check_mark:      | `[]` | The list of Gnome extension IDs to install. The extension ID can be found in the URL on https://extensions.gnome.org/. For example, the _TopIcons Plus_ URL is https://extensions.gnome.org/extension/1031/topicons/ and the extension ID is `1031`. |
+| Variable              | Required           | Default | Description                                                                                                                                                                                                                                              |
+| --------------------- | ------------------ | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `gnome_extension_ids` | :heavy_check_mark: | `[]`    | The list of Gnome extension IDs to install. The extension ID can be found in the URL on <https://extensions.gnome.org/>. For example, the _TopIcons Plus_ URL is <https://extensions.gnome.org/extension/1031/topicons/> and the extension ID is `1031`. |
 
 ## Dependencies
 
