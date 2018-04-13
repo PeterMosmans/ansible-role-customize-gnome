@@ -20,7 +20,7 @@ None
 
 ## Example Playbook
 
-```
+```yaml
 - hosts: localhost
   vars:
     gnome_extension_ids:
