@@ -1,0 +1,15 @@
+galaxy_info:
+  author: Jared Hocutt
+  description: |
+    Installs Gnome extensions specified by the user.
+
+    Available extensions can be found at https://extensions.gnome.org/
+
+  license: BSD
+
+  min_ansible_version: 2.3
+
+  platforms:
+  - name: Fedora
+    versions:
+    - 27

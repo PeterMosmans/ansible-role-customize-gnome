@@ -1,0 +1,67 @@
+---
+
+- name: Parse Gnome Shell version
+  shell: gnome-shell --version | sed 's/[^0-9.]*\([0-9.]*\).*/\1/'
+  register: parse_gnome_shell_version
+  changed_when: no
+
+- set_fact:
+    gnome_shell_version: '{{ parse_gnome_shell_version.stdout }}'
+
+- name: Get Gnome Shell extension info
+  uri:
+    url: https://extensions.gnome.org/extension-info/?pk={{ item }}&shell_version={{ gnome_shell_version }}
+    return_content: yes
+  with_items: '{{ gnome_extension_ids }}'
+  register: gnome_shell_extension_info
+
+- name: Create temporary download directory
+  tempfile:
+    state: directory
+    suffix: ".gnome_extension_download"
+  register: gnome_extension_download_dir
+  changed_when: no
+
+- block:
+    - name: Check for Gnome Shell extensions already installed
+      stat:
+        path: ~/.local/share/gnome-shell/extensions/{{ item.json.uuid }}
+      register: st_existing_extensions
+      with_items: "{{ gnome_shell_extension_info.results }}"
+
+    - name: Download Gnome Shell extensions
+      get_url:
+        url: https://extensions.gnome.org{{ item.item.json.download_url }}
+        dest: "{{ gnome_extension_download_dir.path }}/{{ item.item.json.uuid }}.zip"
+      with_items: "{{ st_existing_extensions.results }}"
+      when: item.stat.exists == False
+      register: download_gnome_shell_extensions
+
+    - name: Create install directories
+      file:
+        path: ~/.local/share/gnome-shell/extensions/{{ item.item.item.json.uuid }}
+        state: directory
+        owner: "{{ ansible_user_uid }}"
+        group: "{{ ansible_user_gid }}"
+        mode: 0775
+      with_items: "{{ download_gnome_shell_extensions.results }}"
+      when: not item|skipped
+
+    - name: Install Gnome Shell extensions
+      unarchive:
+        src: "{{ item.dest }}"
+        dest: ~/.local/share/gnome-shell/extensions/{{ item.item.item.json.uuid }}
+      with_items: "{{ download_gnome_shell_extensions.results }}"
+      when: not item|skipped
+
+    - name: Enable Gnome Shell extensions
+      command: gnome-shell-extension-tool --enable-extension {{ item.item.item.json.uuid }}
+      register: enable_gnome_shell_extensions
+      with_items: "{{ download_gnome_shell_extensions.results }}"
+      when: not item|skipped
+  always:
+    - name: Delete temporary download directory
+      file:
+        path: "{{ gnome_extension_download_dir.path }}"
+        state: absent
+      changed_when: no
