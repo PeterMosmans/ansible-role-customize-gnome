@@ -81,6 +81,12 @@ gnome_dconf:
     value: "false"
 ```
 
+**gtk_version**: The version string of GTK. This is used to create a GTK
+configuration directory, if it doesn't exist already. Example:
+```
+gtk_version: "gtk-3.0"
+```
+
 Dependencies
 ------------
 

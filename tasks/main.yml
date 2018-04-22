@@ -9,6 +9,12 @@
     state: present
   with_items: "{{ gnome_packages|default([]) }}"
 
+- name: Ensure that target directory exists
+  file:
+    path: "/home/{{ gnome_user }}/.config/{{ gtk_version }}"
+    state: directory
+  when: gtk_version is defined
+
 - name: Copy files
   copy:
     src: "{{ item.src }}"
@@ -88,4 +94,5 @@
   with_items: "{{ gnome_dconf|default([]) }}"
   tags:
     - settings
+    - dconf
 
