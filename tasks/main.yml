@@ -13,6 +13,7 @@
   file:
     path: "/home/{{ gnome_user }}/.config/{{ gtk_version }}"
     state: directory
+  become_user: "{{ gnome_user }}"
   when: gtk_version is defined
 
 - name: Copy files
