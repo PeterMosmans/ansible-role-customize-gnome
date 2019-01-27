@@ -12,7 +12,7 @@
   uri:
     url: https://extensions.gnome.org/extension-info/?pk={{ item }}&shell_version={{ gnome_shell_version }}
     return_content: yes
-  with_items: '{{ gnome_extension_ids }}'
+  loop: '{{ gnome_extension_ids }}'
   register: gnome_shell_extension_info
 
 - name: Create temporary download directory
@@ -27,13 +27,17 @@
       stat:
         path: ~/.local/share/gnome-shell/extensions/{{ item.json.uuid }}
       register: st_existing_extensions
-      with_items: "{{ gnome_shell_extension_info.results }}"
+      loop: "{{ gnome_shell_extension_info.results }}"
+      loop_control:
+        label: "{{ item.json.name }}"
 
     - name: Download Gnome Shell extensions
       get_url:
         url: https://extensions.gnome.org{{ item.item.json.download_url }}
         dest: "{{ gnome_extension_download_dir.path }}/{{ item.item.json.uuid }}.zip"
-      with_items: "{{ st_existing_extensions.results }}"
+      loop: "{{ st_existing_extensions.results }}"
+      loop_control:
+        label: "{{ item.item.json.name }}"
       when: item.stat.exists == False
       register: download_gnome_shell_extensions
 
@@ -44,20 +48,26 @@
         owner: "{{ ansible_user_uid }}"
         group: "{{ ansible_user_gid }}"
         mode: 0775
-      with_items: "{{ download_gnome_shell_extensions.results }}"
+      loop: "{{ download_gnome_shell_extensions.results }}"
+      loop_control:
+        label: "{{ item.item.item.json.name }}"
       when: not item|skipped
 
     - name: Install Gnome Shell extensions
       unarchive:
         src: "{{ item.dest }}"
         dest: ~/.local/share/gnome-shell/extensions/{{ item.item.item.json.uuid }}
-      with_items: "{{ download_gnome_shell_extensions.results }}"
+      loop: "{{ download_gnome_shell_extensions.results }}"
+      loop_control:
+        label: "{{ item.item.item.json.name }}"
       when: not item|skipped
 
     - name: Enable Gnome Shell extensions
       command: gnome-shell-extension-tool --enable-extension {{ item.item.item.json.uuid }}
       register: enable_gnome_shell_extensions
-      with_items: "{{ download_gnome_shell_extensions.results }}"
+      loop: "{{ download_gnome_shell_extensions.results }}"
+      loop_control:
+        label: "{{ item.item.item.json.name }}"
       when: not item|skipped
   always:
     - name: Delete temporary download directory
