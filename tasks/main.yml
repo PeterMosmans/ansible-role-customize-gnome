@@ -76,6 +76,7 @@
   unarchive:
     src: "/tmp/{{ item.name }}.zip"
     dest: "/home/{{ gnome_user }}/.local/share/gnome-shell/extensions/{{ item.name }}"
+    creates: "/home/{{ gnome_user }}/.local/share/gnome-shell/extensions/{{ item.name }}/metadata.json"
     remote_src: yes
   become_user: "{{ gnome_user }}"
   with_items: "{{ gnome_extensions|default([])}}"
@@ -96,4 +97,3 @@
   tags:
     - settings
     - dconf
-
