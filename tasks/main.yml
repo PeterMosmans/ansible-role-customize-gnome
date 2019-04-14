@@ -51,7 +51,7 @@
       loop: "{{ download_gnome_shell_extensions.results }}"
       loop_control:
         label: "{{ item.item.item.json.name }}"
-      when: not item|skipped
+      when: not item is skipped
 
     - name: Install Gnome Shell extensions
       unarchive:
@@ -60,7 +60,7 @@
       loop: "{{ download_gnome_shell_extensions.results }}"
       loop_control:
         label: "{{ item.item.item.json.name }}"
-      when: not item|skipped
+      when: not item is skipped
 
     - name: Enable Gnome Shell extensions
       command: gnome-shell-extension-tool --enable-extension {{ item.item.item.json.uuid }}
@@ -68,7 +68,7 @@
       loop: "{{ download_gnome_shell_extensions.results }}"
       loop_control:
         label: "{{ item.item.item.json.name }}"
-      when: not item|skipped
+      when: not item is skipped
   always:
     - name: Delete temporary download directory
       file:
