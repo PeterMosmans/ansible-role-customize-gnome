@@ -1,18 +1,19 @@
 # Gnome Extensions
 
-Installs Gnome extensions specified by the user.
-
-Available extensions can be found at https://extensions.gnome.org/
+This role handles installing the specified Gnome Shell extensions.
 
 ## Requirements
 
-None
+The hosts you are targeting should have the following packages:
+
+- gnome-shell
+- unzip
 
 ## Role Variables
 
-| Variable              | Required           | Default | Description                                                                                                                                                                                                                                              |
-| --------------------- | ------------------ | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `gnome_extension_ids` | :heavy_check_mark: | `[]`    | The list of Gnome extension IDs to install. The extension ID can be found in the URL on <https://extensions.gnome.org/>. For example, the _TopIcons Plus_ URL is <https://extensions.gnome.org/extension/1031/topicons/> and the extension ID is `1031`. |
+| Variable            | Required | Default | Description                                                                                                                                                                                                                                                      |
+| ------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| gnome_extension_ids | &#9989;  | `[]`    | A list of Gnome Shell extension IDs to install.<br><br>The extension ID can be found in the URL on https://extensions.gnome.org/.<br>For example, the TopIcons Plus URL is https://extensions.gnome.org/extension/1031/topicons/ and the extension ID is `1031`. |
 
 ## Dependencies
 
@@ -21,11 +22,19 @@ None
 ## Example Playbook
 
 ```yaml
-- hosts: localhost
-  vars:
-    gnome_extension_ids:
-      - 234  # Steal My Focus by sstent
-      - 1031 # TopIcons Plus by phocean
+- hosts: servers
   roles:
-      - jaredhocutt.gnome-extensions
+    - role: jaredhocutt.gnome_extensions
+      vars:
+        gnome_extension_ids:
+          - 964
+          - 770
 ```
+
+## License
+
+MIT
+
+## Author Information
+
+Jared Hocutt (@jaredhocutt)

@@ -1,17 +1,24 @@
 galaxy_info:
   role_name: gnome_extensions
-  author: Jared Hocutt
-  description: |
-    Installs Gnome extensions specified by the user.
 
-    Available extensions can be found at https://extensions.gnome.org/
+  author: Jared Hocutt (@jaredhocutt)
+  description: >-
+    This role handles installing the specified Gnome Shell extensions.
 
-  license: BSD
+  license: MIT
 
-  min_ansible_version: 2.3
+  # Reason: loop
+  min_ansible_version: 2.5
 
   platforms:
   - name: Fedora
     versions:
-    - 27
-    - 28
+    - all
+
+  galaxy_tags:
+    - gnome
+    - gnome-shell
+    - extensions
+    - system
+
+dependencies: []
