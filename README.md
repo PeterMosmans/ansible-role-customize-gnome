@@ -60,6 +60,12 @@ gnome_extensions:
     name: "hidetopbar@mathieu.bidon.ca"
 ```
 
+The properties `url` and/or `name` of each item can also be loaded dynamically from [the web](https://extensions.gnome.org/extension-info/?pk=545) when `id` is present. Predefined `name` and/or `url` will not be overridden! Here is an example that loads the same extension as the example above.
+```
+gnome_extensions:
+  - id: 545
+```
+
 **gnome_gsettings**: A list of gsettings entries that will be set for the
 `gnome_user`, using `gsettings`.
 Each list item consists of a `schema`, `key` and `value` entry. Note that values
@@ -112,8 +118,16 @@ Example Playbook
       - src: gtk.css
         dest: /home/{{ gnome_user }}/.config/gtk-3.0/gtk.css
     gnome_extensions:
-      - url: "https://extensions.gnome.org/download-extension/hidetopbar@mathieu.bidon.ca.shell-extension.zip?version_tag=6450"
-        name: "hidetopbar@mathieu.bidon.ca"
+      - url: https://extensions.gnome.org/download-extension/hidetopbar@mathieu.bidon.ca.shell-extension.zip?version_tag=6450
+        name: hidetopbar@mathieu.bidon.ca
+      - id: 15
+      - id: 1160
+        url: https://example.com/gnome-extension/1160.zip
+      - id: 1236
+        name: CustomNamedExtension
+      - id: 1267
+        url: https://example.com/gnome-extension/1267.zip
+        name: CustomNamedExtension2
     gnome_gsettings:
       - schema: org.gnome.desktop.interface
         key: monospace-font-name
