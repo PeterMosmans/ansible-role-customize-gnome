@@ -1,6 +1,14 @@
 ---
 # tasks file for PeterMosmans.customize-gnome
 
+- name: Parse Gnome Shell version
+  shell: gnome-shell --version | sed 's/[^0-9.]*\([0-9.]*\).*/\1/'
+  register: r_gnome_extension_parse_shell_version
+  changed_when: no
+
+- set_fact:
+    gnome_shell_version: "{{ r_gnome_extension_parse_shell_version.stdout }}"
+
 - name: Install (font) packages
   apt:
     name: "{{ item }}"
@@ -54,6 +62,14 @@
   shell: fc-cache -fv
   tags:
     - fonts
+
+- name: Load Gnome extension information
+  include_tasks: get_extension_info.yml
+  with_items: "{{ gnome_extensions }}"
+
+- name: Use gnome_extensions_full
+  set_fact:
+    gnome_extensions: "{{ gnome_extensions_full }}"
 
 - name: Download GNOME Shell extensions
   get_url:
