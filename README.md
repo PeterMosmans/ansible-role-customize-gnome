@@ -66,6 +66,13 @@ gnome_extensions:
   - id: 545
 ```
 
+If the property `enable` is present and set to a truthy value (e.g. `yes`), the extension will be enabled automatically after the installation. Example:
+```
+gnome_extensions:
+  - id: 1112
+    enable: yes
+```
+
 **gnome_gsettings**: A list of gsettings entries that will be set for the
 `gnome_user`, using `gsettings`.
 Each list item consists of a `schema`, `key` and `value` entry. Note that values
@@ -128,6 +135,8 @@ Example Playbook
       - id: 1267
         url: https://example.com/gnome-extension/1267.zip
         name: CustomNamedExtension2
+      - id: 1112
+        enable: yes
     gnome_gsettings:
       - schema: org.gnome.desktop.interface
         key: monospace-font-name
