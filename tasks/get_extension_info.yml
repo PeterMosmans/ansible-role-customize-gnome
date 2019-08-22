@@ -12,7 +12,8 @@
       {{ gnome_extensions_full | default([]) + [ {
         'id': item.id,
         'name': item.name | default( r_gnome_extension_info.json.uuid ),
-        'url': item.url | default( 'https://extensions.gnome.org' + r_gnome_extension_info.json.download_url )
+        'url': item.url | default( 'https://extensions.gnome.org' + r_gnome_extension_info.json.download_url ),
+        'enable': item.enable | default( false )
       } ] }}
   when: "'skipped' not in r_gnome_extension_info"
 
