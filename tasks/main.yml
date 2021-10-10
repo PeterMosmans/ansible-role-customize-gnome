@@ -100,7 +100,7 @@
     - extensions
 
 - name: Modify application settings using gsettings
-  shell: dbus-launch gsettings set {{ item.schema }} {{ item.key }} {{ item.value }}
+  shell: dbus-launch gsettings{% if item.schemadir is defined %} --schemadir {{ item.schemadir }}{% endif %} set {{ item.schema }} {{ item.key }} {{ item.value }}
   become_user: "{{ gnome_user }}"
   with_items: "{{ gnome_gsettings|default([]) }}"
   tags:
