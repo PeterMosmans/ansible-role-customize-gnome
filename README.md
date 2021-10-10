@@ -78,6 +78,30 @@ gnome_gsettings:
     value: '"Source Code Pro Medium 16"'
 ```
 
+If an item in the `gnome_settings` list includes a `schemadir` property, the
+`gsettings set` command will include it as the value of the `--schemadir`
+option. This is useful in the case of extensions installed manually, or by
+this role (their schemas will not be automatically discovered by the `gsettings`
+command). For example, this configuration will set the `unit` property of the
+Openweather extension to `celsius`:
+
+```
+gnome_settings:
+  - schema: org.gnome.shell.extensions.openweather
+    key: "unit"
+    value: '"celsius"'
+    schemadir: "/home/{{ gnome_user }}/.local/share/gnome-shell/extensions/openweather-extension@jenslody.de/schemas"
+```
+
+With `gnome_user` set to `example`, this would run the following command:
+
+```
+gsettings --schemadir /home/example/.local/share/gnome-shell/extensions/openweather-extension@jenslody.de/schemas \
+  set org.gnome.shell.extensions.openweather unit "celsius"
+```
+
+The `--schemadir` option is omitted when the item does not include `schemadir`.
+
 **gnome_dconf**: A list of dconf entries that will be set for the `gnome_user`,
 using `dconf`.
 Each list item consists of a `key` and `value` entry. Example:
