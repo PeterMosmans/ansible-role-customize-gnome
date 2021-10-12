@@ -111,7 +111,7 @@
     - settings
 
 - name: Modify application settings using gsettings
-  shell: dbus-launch gsettings set {{ item.schema }} {{ item.key }} {{ item.value }}
+  shell: gsettings {{ ('--schemadir ' + item.schemadir) if 'schemadir' in item else '' }} set {{ item.schema }} {{ item.key }} {{ item.value }}
   become_user: "{{ gnome_user }}"
   with_items: "{{ gnome_gsettings|default([]) }}"
   tags:

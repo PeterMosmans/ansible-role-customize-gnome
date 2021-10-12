@@ -141,6 +141,10 @@ Example Playbook
       - schema: org.gnome.desktop.interface
         key: monospace-font-name
         value: '"Source Code Pro Medium 16"'
+      - schema: org.gnome.shell.extensions.dash-to-panel
+        schemadir: ~/.local/share/gnome-shell/extensions/dash-to-panel@jderose9.github.com/schemas
+        key: panel-position
+        value: TOP
     gnome_dconf:
       - key: /org/gnome/desktop/background/show-desktop-icons
         value: "false"
