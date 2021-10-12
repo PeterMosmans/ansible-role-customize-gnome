@@ -99,6 +99,17 @@
   tags:
     - extensions
 
+- name: Enable extensions
+  shell: gnome-shell-extension-tool -e {{ item.name }}
+  become_user: "{{ gnome_user }}"
+  when: item.enable | default(false)
+  with_items: "{{ gnome_extensions | default([]) }}"
+  register: r_gnome_enable_extension
+  changed_when: "'is now enabled' in r_gnome_enable_extension.stderr"
+  failed_when: r_gnome_enable_extension.rc != 0 and 'already enabled' not in r_gnome_enable_extension.stderr
+  tags:
+    - settings
+
 - name: Modify application settings using gsettings
   shell: dbus-launch gsettings set {{ item.schema }} {{ item.key }} {{ item.value }}
   become_user: "{{ gnome_user }}"
