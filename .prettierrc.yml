@@ -1,0 +1,9 @@
+# Ignore whitespace between XML tags
+xmlWhitespaceSensitivity: ignore
+# Overrides are extension or parser specific rules
+overrides:
+  - files:
+      - "*.md"
+    options:
+# Always wrap markdown text based on the print width
+      proseWrap: always
