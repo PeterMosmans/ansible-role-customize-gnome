@@ -2,6 +2,7 @@ galaxy_info:
   author: Peter Mosmans
   description: Customizes settings for a GNOME desktop, including shell extensions and fonts.
   company: Go Forward
+  namespace: petermosmans
   license: GPLv3
   min_ansible_version: 1.2
   platforms:
@@ -19,4 +20,3 @@ galaxy_info:
     - gnome
     - installation
 dependencies: []
-
