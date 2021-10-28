@@ -26,6 +26,7 @@
     update_cache: yes
     install-recommends: no
     state: present
+  become: yes
   loop: "{{ gnome_packages|default([]) }}"
 
 - name: Ensure that target directory exists
@@ -66,7 +67,7 @@
 
 - name: Load Gnome extension information
   include_tasks: get_extension_info.yml
-  with_items: "{{ gnome_extensions }}"
+  loop: "{{ gnome_extensions }}"
 
 - name: Use gnome_extensions_full
   set_fact:
@@ -123,14 +124,19 @@
   ansible.builtin.command:
     cmd: gsettings {{ ('--schemadir ' + item.schemadir) if 'schemadir' in item else '' }} set {{ item.schema }} {{ item.key }} {{ item.value }}
   become_user: "{{ gnome_user }}"
-  with_items: "{{ gnome_gsettings|default([]) }}"
+  changed_when: false
+  loop: "{{ gnome_gsettings|default([]) }}"
+  loop_control:
+    label: "{{ item.key }}"
   tags:
     - settings
 
 - name: Modify application settings using dconf
   ansible.builtin.command: dbus-launch dconf write {{ item.key }} {{ item.value }}
   become_user: "{{ gnome_user }}"
-  with_items: "{{ gnome_dconf|default([]) }}"
+  loop: "{{ gnome_dconf|default([]) }}"
+  loop_control:
+    label: "{{ item.key }}"
   changed_when: false
   tags:
     - settings
