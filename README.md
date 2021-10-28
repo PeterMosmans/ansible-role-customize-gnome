@@ -1,6 +1,7 @@
 # Ansible Role: customize-gnome
 
-Build status for this role: [![Build Status](https://travis-ci.org/PeterMosmans/ansible-role-customize-gnome.svg)](https://travis-ci.org/PeterMosmans/ansible-role-customize-gnome)
+Build status for this role:
+[![Build Status](https://travis-ci.org/PeterMosmans/ansible-role-customize-gnome.svg)](https://travis-ci.org/PeterMosmans/ansible-role-customize-gnome)
 
 This role customizes the GNOME desktop. It installs fonts and GNOME extensions
 from packages or zip files, copies files like desktop backgrounds and GNOME
@@ -22,8 +23,8 @@ are listed below:
 gnome_user: root
 ```
 
-If no ``gnome_user`` is specified, it will use the ``ansible_user_id`` variable
-(the user under which Ansible connects to the node).
+If no `gnome_user` is specified, it will use the `ansible_user_id` variable (the
+user under which Ansible connects to the node).
 
 **gnome_packages**: A list of packages that will be installed. Example:
 
@@ -53,24 +54,20 @@ gnome_files:
     dest: /home/{{ gnome_user }}/.config/gtk-3.0/gtk.css
 ```
 
-**gnome_extensions**: A list of GNOME shell extensions that will be
-downloaded from a remote source and unzipped to the users' local extensions
-directory. Each list item consists of an `url` and `name`. Example:
+**gnome_extensions**: A list of GNOME shell extensions that will be installed
+(downloaded from a remote source and unzipped to the users' local extensions).
 
-```
-gnome_extensions:
-  - url: "https://extensions.gnome.org/download-extension/hidetopbar@mathieu.bidon.ca.shell-extension.zip?version_tag=6450"
-    name: "hidetopbar@mathieu.bidon.ca"
-```
-
-The properties `url` and/or `name` of each item can also be loaded dynamically from [the web](https://extensions.gnome.org/extension-info/?pk=545) when `id` is present. Predefined `name` and/or `url` will not be overridden! Here is an example that loads the same extension as the example above.
+The properties `url` and/or `name` of each item are loaded dynamically from
+[the web](https://extensions.gnome.org/extension-info/?pk=545) when `id` is
+present.
 
 ```
 gnome_extensions:
   - id: 545
 ```
 
-If the property `enable` is present and set to a truthy value (e.g. `yes`), the extension will be enabled automatically after the installation. Example:
+If the property `enable` is present and set to a truthy value (e.g. `yes`), the
+extension will be enabled automatically after the installation. Example:
 
 ```
 gnome_extensions:
@@ -78,11 +75,23 @@ gnome_extensions:
     enable: yes
 ```
 
+Instead of specifying the ID, you can also enforce the `url` and `name` keys.
+Example:
+
+```
+gnome_extensions:
+  - url:
+    "https://extensions.gnome.org/download-extension/hidetopbar@mathieu.bidon.ca.shell-extension.zip?version_tag=6450"
+    name: "hidetopbar@mathieu.bidon.ca"
+```
+
+Note that a predefined `name` and/or `url` value will not be overridden by
+specifying the `id`.
+
 **gnome_gsettings**: A list of gsettings entries that will be set for the
-`gnome_user`, using `gsettings`.
-Each list item consists of a `schema`, `key` and `value` entry. Note that values
-should be contained within single quotes AND double quotes, due to Ansible's
-quoting settings for shell commands. Example:
+`gnome_user`, using `gsettings`. Each list item consists of a `schema`, `key`
+and `value` entry. Note that values should be contained within single quotes AND
+double quotes, due to Ansible's quoting settings for shell commands. Example:
 
 ```
 gnome_gsettings:
@@ -92,8 +101,7 @@ gnome_gsettings:
 ```
 
 **gnome_dconf**: A list of dconf entries that will be set for the `gnome_user`,
-using `dconf`.
-Each list item consists of a `key` and `value` entry. Example:
+using `dconf`. Each list item consists of a `key` and `value` entry. Example:
 
 ```
 gnome_dconf:
@@ -119,18 +127,11 @@ None.
   become: yes
   become_method: sudo
   roles:
-    - role: PeterMosmans.customize-gnome
+    - role: petermosmans.customize-gnome
   vars:
-    gnome_user: root
-    gnome_packages:
-      - fonts-roboto
-    gnome_fonts:
-      - url: https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip
-        name: SourceCodePro
-        fonts: "source-code-pro-2.030R-ro-1.050R-it/OTF/*.otf"
-    gnome_files:
-      - src: gtk.css
-        dest: /home/{{ gnome_user }}/.config/gtk-3.0/gtk.css
+    gnome_dconf:
+      - key: /org/gnome/desktop/background/show-desktop-icons
+        value: "false"
     gnome_extensions:
       - url: https://extensions.gnome.org/download-extension/hidetopbar@mathieu.bidon.ca.shell-extension.zip?version_tag=6450
         name: hidetopbar@mathieu.bidon.ca
@@ -144,6 +145,13 @@ None.
         name: CustomNamedExtension2
       - id: 1112
         enable: yes
+    gnome_files:
+      - src: gtk.css
+        dest: /home/{{ gnome_user }}/.config/gtk-3.0/gtk.css
+    gnome_fonts:
+      - url: https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip
+        name: SourceCodePro
+        fonts: "source-code-pro-2.030R-ro-1.050R-it/OTF/*.otf"
     gnome_gsettings:
       - schema: org.gnome.desktop.interface
         key: monospace-font-name
@@ -152,9 +160,10 @@ None.
         schemadir: ~/.local/share/gnome-shell/extensions/dash-to-panel@jderose9.github.com/schemas
         key: panel-position
         value: TOP
-    gnome_dconf:
-      - key: /org/gnome/desktop/background/show-desktop-icons
-        value: "false"
+    gnome_packages:
+      - fonts-roboto
+    gnome_user: peter
+
 ```
 
 This example will install the global fonts Roboto, Source Code Pro, the GNOME
@@ -166,5 +175,5 @@ GPLv3
 
 ## Author Information
 
-Initially created by Peter Mosmans.
-Contributions by many others: see https://github.com/PeterMosmans/ansible-role-customize-gnome/graphs/contributors
+Initially created by Peter Mosmans. Contributions by many others: see
+https://github.com/PeterMosmans/ansible-role-customize-gnome/graphs/contributors
