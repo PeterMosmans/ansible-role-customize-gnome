@@ -1,0 +1,2 @@
+---
+gnome_user: "{{ ansible_user_id }}"

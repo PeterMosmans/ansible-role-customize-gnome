@@ -2,49 +2,64 @@
 # tasks file for PeterMosmans.customize-gnome
 
 - name: Parse Gnome Shell version
-  shell: gnome-shell --version | sed 's/[^0-9.]*\([0-9.]*\).*/\1/'
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      gnome-shell --version | sed 's/[^0-9.]*\([0-9.]*\).*/\1/'
+    executable: /bin/bash
   register: r_gnome_extension_parse_shell_version
   changed_when: no
 
-- set_fact:
+- name: Set Gnome Shell version as parameter
+  ansible.builtin.set_fact:
     gnome_shell_version: "{{ r_gnome_extension_parse_shell_version.stdout }}"
 
+- name: Check if Gnome Shell was detected
+  ansible.builtin.debug:
+    msg: "Sorry - no Gnome Shell detected... exiting"
+  failed_when: true
+  when: not r_gnome_extension_parse_shell_version.stdout
+
 - name: Install (font) packages
-  apt:
+  ansible.builtin.apt:
     name: "{{ item }}"
     update_cache: yes
     install-recommends: no
     state: present
-  with_items: "{{ gnome_packages|default([]) }}"
+  loop: "{{ gnome_packages|default([]) }}"
 
 - name: Ensure that target directory exists
-  file:
+  ansible.builtin.file:
     path: "/home/{{ gnome_user }}/.config/{{ gtk_version }}"
     state: directory
   become_user: "{{ gnome_user }}"
   when: gtk_version is defined
 
 - name: Copy files
-  copy:
+  ansible.builtin.copy:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: "{{ gnome_user }}"
     group: "{{ gnome_user }}"
     mode: 0644
-  with_items: "{{ gnome_files|default([]) }}"
+  loop: "{{ gnome_files|default([]) }}"
+  loop_control:
+    label: "{{ item.src }}"
   tags:
     - files
 
 - name: Download zipped font files
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ item.url }}"
     dest: "/tmp/{{ item.name }}.zip"
-  with_items: "{{ gnome_fonts|default([]) }}"
+  loop: "{{ gnome_fonts|default([]) }}"
+  loop_control:
+    label: "{{ item.name }}"
   tags:
     - fonts
 
 - name: Unzip font files
-  unarchive:
+  ansible.builtin.unarchive:
     src: "/tmp/{{ item.name }}.zip"
     dest: "/tmp/"
     remote_src: yes
@@ -53,13 +68,16 @@
     - fonts
 
 - name: Install fonts
-  shell: mv /tmp/{{ item.fonts }} /usr/local/share/fonts/
-  with_items: "{{ gnome_fonts|default([]) }}"
+  ansible.builtin.command:
+    cmd: mv /tmp/{{ item.fonts }} /usr/local/share/fonts/
+  changed_when: false
+  loop: "{{ gnome_fonts|default([]) }}"
   tags:
     - fonts
 
 - name: Refresh font list
-  shell: fc-cache -fv
+  ansible.builtin.command: fc-cache -fv
+  changed_when: false
   tags:
     - fonts
 
@@ -75,7 +93,9 @@
   get_url:
     url: "{{ item.url }}"
     dest: "/tmp/{{ item.name }}.zip"
-  with_items: "{{ gnome_extensions|default([]) }}"
+  loop: "{{ gnome_extensions|default([]) }}"
+  loop_control:
+    label: "{{ item.name }}"
   tags:
     - extensions
 
@@ -84,26 +104,32 @@
     path: /home/{{ gnome_user }}/.local/share/gnome-shell/extensions/{{ item.name }}
     state: directory
   become_user: "{{ gnome_user }}"
-  with_items: "{{ gnome_extensions|default([]) }}"
+  loop: "{{ gnome_extensions|default([]) }}"
+  loop_control:
+    label: "{{ item.name }}"
   tags:
     - extensions
 
 - name: Unzip GNOME extensions
-  unarchive:
+  ansible.builtin.unarchive:
     src: "/tmp/{{ item.name }}.zip"
     dest: "/home/{{ gnome_user }}/.local/share/gnome-shell/extensions/{{ item.name }}"
     creates: "/home/{{ gnome_user }}/.local/share/gnome-shell/extensions/{{ item.name }}/metadata.json"
     remote_src: yes
   become_user: "{{ gnome_user }}"
-  with_items: "{{ gnome_extensions|default([])}}"
+  loop: "{{ gnome_extensions|default([]) }}"
+  loop_control:
+    label: "{{ item.name }}"
   tags:
     - extensions
 
 - name: Enable extensions
-  shell: gnome-shell-extension-tool -e {{ item.name }}
+  ansible.builtin.command: gnome-shell-extension-tool -e {{ item.name }}
   become_user: "{{ gnome_user }}"
   when: item.enable | default(false)
-  with_items: "{{ gnome_extensions | default([]) }}"
+  loop: "{{ gnome_extensions | default([]) }}"
+  loop_control:
+    label: "{{ item.name }}"
   register: r_gnome_enable_extension
   changed_when: "'is now enabled' in r_gnome_enable_extension.stderr"
   failed_when: r_gnome_enable_extension.rc != 0 and 'already enabled' not in r_gnome_enable_extension.stderr
@@ -111,16 +137,18 @@
     - settings
 
 - name: Modify application settings using gsettings
-  shell: gsettings {{ ('--schemadir ' + item.schemadir) if 'schemadir' in item else '' }} set {{ item.schema }} {{ item.key }} {{ item.value }}
+  ansible.builtin.command:
+    cmd: gsettings {{ ('--schemadir ' + item.schemadir) if 'schemadir' in item else '' }} set {{ item.schema }} {{ item.key }} {{ item.value }}
   become_user: "{{ gnome_user }}"
   with_items: "{{ gnome_gsettings|default([]) }}"
   tags:
     - settings
 
 - name: Modify application settings using dconf
-  shell: dbus-launch dconf write {{ item.key }} {{ item.value }}
+  ansible.builtin.command: dbus-launch dconf write {{ item.key }} {{ item.value }}
   become_user: "{{ gnome_user }}"
   with_items: "{{ gnome_dconf|default([]) }}"
+  changed_when: false
   tags:
     - settings
     - dconf

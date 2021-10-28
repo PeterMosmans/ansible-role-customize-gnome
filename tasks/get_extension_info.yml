@@ -1,13 +1,13 @@
 ---
 - name: Get Gnome Shell extension info for {{ item.id }}
-  uri:
+  ansible.builtin.uri:
     url: https://extensions.gnome.org/extension-info/?pk={{ item.id }}&shell_version={{ gnome_shell_version }}
     return_content: yes
   register: r_gnome_extension_info
   when: "'name' not in item or 'url' not in item"
 
 - name: Add gnome_extension item with additional info to gnome_extensions_full
-  set_fact:
+  ansible.builtin.set_fact:
     gnome_extensions_full: |
       {{ gnome_extensions_full | default([]) + [ {
         'id': item.id,
@@ -18,6 +18,6 @@
   when: "'skipped' not in r_gnome_extension_info"
 
 - name: Add original gnome_extensions item to gnome_extensions_full
-  set_fact:
+  ansible.builtin.set_fact:
     gnome_extensions_full: "{{ gnome_extensions_full | default([]) + [ item ] }}"
   when: "'skipped' in r_gnome_extension_info"
