@@ -31,15 +31,19 @@
     owner: "{{ gnome_user }}"
     group: "{{ gnome_user }}"
     mode: 0644
-  with_items: "{{ gnome_files|default([]) }}"
+  loop: "{{ gnome_files|default([]) }}"
+  loop_control:
+    label: "{{ item.src }}"
   tags:
     - files
 
 - name: Download zipped font files
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ item.url }}"
     dest: "/tmp/{{ item.name }}.zip"
-  with_items: "{{ gnome_fonts|default([]) }}"
+  loop: "{{ gnome_fonts|default([]) }}"
+  loop_control:
+    label: "{{ item.name }}"
   tags:
     - fonts
 
@@ -76,7 +80,9 @@
   get_url:
     url: "{{ item.url }}"
     dest: "/tmp/{{ item.name }}.zip"
-  with_items: "{{ gnome_extensions|default([]) }}"
+  loop: "{{ gnome_extensions|default([]) }}"
+  loop_control:
+    label: "{{ item.name }}"
   tags:
     - extensions
 
@@ -85,7 +91,9 @@
     path: /home/{{ gnome_user }}/.local/share/gnome-shell/extensions/{{ item.name }}
     state: directory
   become_user: "{{ gnome_user }}"
-  with_items: "{{ gnome_extensions|default([]) }}"
+  loop: "{{ gnome_extensions|default([]) }}"
+  loop_control:
+    label: "{{ item.name }}"
   tags:
     - extensions
 
@@ -96,7 +104,9 @@
     creates: "/home/{{ gnome_user }}/.local/share/gnome-shell/extensions/{{ item.name }}/metadata.json"
     remote_src: yes
   become_user: "{{ gnome_user }}"
-  with_items: "{{ gnome_extensions|default([])}}"
+  loop: "{{ gnome_extensions|default([])}}"
+  loop_control:
+    label: "{{ item.name }}"
   tags:
     - extensions
 
@@ -104,7 +114,9 @@
   ansible.builtin.command: gnome-shell-extension-tool -e {{ item.name }}
   become_user: "{{ gnome_user }}"
   when: item.enable | default(false)
-  with_items: "{{ gnome_extensions | default([]) }}"
+  loop: "{{ gnome_extensions | default([]) }}"
+  loop_control:
+    label: "{{ item.name }}"
   register: r_gnome_enable_extension
   changed_when: "'is now enabled' in r_gnome_enable_extension.stderr"
   failed_when: r_gnome_enable_extension.rc != 0 and 'already enabled' not in r_gnome_enable_extension.stderr
