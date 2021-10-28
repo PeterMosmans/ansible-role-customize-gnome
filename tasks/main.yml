@@ -69,15 +69,11 @@
   include_tasks: get_extension_info.yml
   loop: "{{ gnome_extensions }}"
 
-- name: Use gnome_extensions_full
-  set_fact:
-    gnome_extensions: "{{ gnome_extensions_full }}"
-
 - name: Download GNOME Shell extensions
   get_url:
     url: "{{ item.url }}"
     dest: "/tmp/{{ item.name }}.zip"
-  loop: "{{ gnome_extensions|default([]) }}"
+  loop: "{{ gnome_extensions_full|default([]) }}"
   loop_control:
     label: "{{ item.name }}"
   tags:
@@ -88,7 +84,7 @@
     path: /home/{{ gnome_user }}/.local/share/gnome-shell/extensions/{{ item.name }}
     state: directory
   become_user: "{{ gnome_user }}"
-  loop: "{{ gnome_extensions|default([]) }}"
+  loop: "{{ gnome_extensions_full|default([]) }}"
   loop_control:
     label: "{{ item.name }}"
   tags:
@@ -101,7 +97,7 @@
     creates: "/home/{{ gnome_user }}/.local/share/gnome-shell/extensions/{{ item.name }}/metadata.json"
     remote_src: yes
   become_user: "{{ gnome_user }}"
-  loop: "{{ gnome_extensions|default([]) }}"
+  loop: "{{ gnome_extensions_full|default([]) }}"
   loop_control:
     label: "{{ item.name }}"
   tags:
@@ -111,7 +107,7 @@
   ansible.builtin.command: gnome-shell-extension-tool -e {{ item.name }}
   become_user: "{{ gnome_user }}"
   when: item.enable | default(false)
-  loop: "{{ gnome_extensions | default([]) }}"
+  loop: "{{ gnome_extensions_full | default([]) }}"
   loop_control:
     label: "{{ item.name }}"
   register: r_gnome_enable_extension
