@@ -48,30 +48,13 @@
   tags:
     - files
 
-- name: Download zipped font files
-  ansible.builtin.get_url:
-    url: "{{ item.url }}"
-    dest: "/tmp/{{ item.name }}.zip"
-  loop: "{{ gnome_fonts|default([]) }}"
-  loop_control:
-    label: "{{ item.name }}"
-  tags:
-    - fonts
-
-- name: Unzip font files
-  ansible.builtin.unarchive:
-    src: "/tmp/{{ item.name }}.zip"
-    dest: "/tmp/"
-    remote_src: yes
-  with_items: "{{ gnome_fonts|default([]) }}"
-  tags:
-    - fonts
-
 - name: Install fonts
-  ansible.builtin.command:
-    cmd: mv /tmp/{{ item.fonts }} /usr/local/share/fonts/
-  changed_when: false
-  loop: "{{ gnome_fonts|default([]) }}"
+  ansible.builtin.include_tasks:
+    file: install_font.yml
+  loop: "{{ gnome_fonts | default([]) }}"
+  loop_control:
+    label: "{{ gnome_font.name }}"
+    loop_var: gnome_font
   tags:
     - fonts
 
