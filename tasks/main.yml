@@ -10,10 +10,12 @@
   register: r_gnome_extension_parse_shell_version
   changed_when: no
 
-- set_fact:
+- name: Set Gnome Shell version as parameter
+  ansible.builtin.set_fact:
     gnome_shell_version: "{{ r_gnome_extension_parse_shell_version.stdout }}"
 
-- ansible.builtin.debug:
+- name: Check if Gnome Shell was detected
+  ansible.builtin.debug:
     msg: "Sorry - no Gnome Shell detected... exiting"
   failed_when: true
   when: not r_gnome_extension_parse_shell_version.stdout
