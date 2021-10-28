@@ -1,5 +1,16 @@
 # Changelog
 
+### [0.2.3](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.2...0.2.3) (2021-10-28)
+
+### Features
+
+- enforce namespace
+  ([06a38b4](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/06a38b4ef56ce8e25a394e9e537be86f273319a6))
+- move installation of fonts to different tasks file
+  ([35fce94](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/35fce947900d6bb4807239b041659188797282e4))
+- use nicer display of loops
+  ([5212b6d](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/5212b6d0750148bba96f584776d3fd389b3402a2))
+
 ### [0.2.2](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.1...0.2.2) (2021-10-28)
 
 ### Features
