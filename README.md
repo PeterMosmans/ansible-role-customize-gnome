@@ -22,6 +22,9 @@ are listed below:
 gnome_user: root
 ```
 
+If no ``gnome_user`` is specified, it will use the ``ansible_user_id`` variable
+(the user under which Ansible connects to the node).
+
 **gnome_packages**: A list of packages that will be installed. Example:
 
 ```
