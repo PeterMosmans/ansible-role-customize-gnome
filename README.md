@@ -136,6 +136,14 @@ None.
       - url: https://extensions.gnome.org/download-extension/hidetopbar@mathieu.bidon.ca.shell-extension.zip?version_tag=6450
         name: hidetopbar@mathieu.bidon.ca
       - id: 15
+      - id: 1160
+        url: https://example.com/gnome-extension/1160.zip
+      - id: 1236
+        name: CustomNamedExtension
+      - id: 1267
+        name: CustomNamedExtension2
+        url: https://example.com/gnome-extension/1267.zip
+      - id: 1112
         enable: yes
     gnome_files:
       - src: gtk.css
@@ -148,6 +156,10 @@ None.
       - schema: org.gnome.desktop.interface
         key: monospace-font-name
         value: '"Source Code Pro Medium 16"'
+      - schema: org.gnome.shell.extensions.dash-to-panel
+        schemadir: ~/.local/share/gnome-shell/extensions/dash-to-panel@jderose9.github.com/schemas
+        key: panel-position
+        value: TOP
     gnome_packages:
       - fonts-roboto
     gnome_user: peter
