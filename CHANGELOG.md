@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.2.5](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.4...0.2.5) (2022-07-11)
+
+### Features
+
+- take only the first 2 parts of gnome-shell version
+  ([ef7ac3d](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/ef7ac3d6449d5ee996f83d5144d873264e84726b))
+
 ### [0.2.4](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.3...0.2.4) (2021-10-31)
 
 ### [0.2.3](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.2...0.2.3) (2021-10-28)
