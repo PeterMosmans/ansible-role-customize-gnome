@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.2.6](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.5...0.2.6) (2022-08-09)
+
+### Bug Fixes
+
+- allow shell extension upgrade to work again
+  ([ffd2ecd](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/ffd2ecd8198e41083acb611a9d050a00fc58b706))
+
 ### [0.2.5](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.4...0.2.5) (2022-07-11)
 
 ### Features
