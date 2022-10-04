@@ -10,7 +10,15 @@ dconf or GSettings format.
 
 ## Requirements
 
-None.
+The community.general collection, as specified in ``requirements.yml``. Install
+the requirements using
+
+```bash
+ansible-galaxy install -r requirements.yml
+```
+
+Furthermore, the ``community.general.dconf`` module requires the Python
+``psutil`` module. This module will be installed automatically.
 
 ## Role Variables
 

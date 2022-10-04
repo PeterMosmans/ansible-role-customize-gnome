@@ -126,8 +126,17 @@
   tags:
     - settings
 
+- name: Install prerequisites for the dconf module
+  ansible.builtin.package:
+    name: python3-psutil
+    state: present
+  become: true
+  when: gnome_dconf|default(false)
+
 - name: Modify application settings using dconf
-  ansible.builtin.command: dbus-launch dconf write {{ item.key }} {{ item.value }}
+  community.general.dconf:
+    key: "{{ item.key }}"
+    value: "{{ item.value }}"
   become_user: "{{ gnome_user }}"
   loop: "{{ gnome_dconf|default([]) }}"
   loop_control:
