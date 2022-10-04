@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.2.7](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.6...0.2.7) (2022-10-04)
+
+### Bug Fixes
+
+- don't allow characters in version number
+  ([9c56ad0](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/9c56ad0e51895a5c53dfa2009474b69746b01c4d))
+
 ### [0.2.6](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.5...0.2.6) (2022-08-09)
 
 ### Bug Fixes
