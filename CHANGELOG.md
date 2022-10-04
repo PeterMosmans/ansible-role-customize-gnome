@@ -1,5 +1,19 @@
 # Changelog
 
+### [0.2.8](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.7...0.2.8) (2022-10-04)
+
+### Features
+
+- add automated security testing
+  ([760ddee](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/760ddeefb5d6a20524d2e770549c7992aa466b7e))
+- use dconf module
+  ([49a9cc0](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/49a9cc00bcb9b152d28be73c698caedd23e742a6))
+
+### Bug Fixes
+
+- don't fail with empty extensions list
+  ([812d815](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/812d815b61536fdc29b77db8dda43f61e9e2d27d))
+
 ### [0.2.7](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.6...0.2.7) (2022-10-04)
 
 ### Bug Fixes
