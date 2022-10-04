@@ -4,15 +4,15 @@
   ansible.builtin.unarchive:
     src: "{{ gnome_font.url }}"
     dest: "/tmp/"
-    remote_src: yes
-  become: yes
+    remote_src: true
+  become: true
   changed_when: false
 
 - name: Install font
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: /usr/local/share/fonts/
-    remote_src: yes
+    remote_src: true
   changed_when: false
-  become: yes
+  become: true
   with_fileglob: "/tmp/{{ gnome_font.fonts|default([]) }}"

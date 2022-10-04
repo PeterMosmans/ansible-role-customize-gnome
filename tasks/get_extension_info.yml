@@ -2,7 +2,7 @@
 - name: Get Gnome Shell extension info for {{ item.id }}
   ansible.builtin.uri:
     url: https://extensions.gnome.org/extension-info/?pk={{ item.id }}&shell_version={{ gnome_shell_version }}
-    return_content: yes
+    return_content: true
   register: r_gnome_extension_info
   when: "'name' not in item or 'url' not in item"
 

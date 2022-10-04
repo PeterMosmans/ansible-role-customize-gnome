@@ -8,7 +8,7 @@
       gnome-shell --version | sed 's/^[^0-9.]*//' | sed 's/[^0-9]*$//'
     executable: /bin/bash
   register: r_gnome_extension_parse_shell_version
-  changed_when: no
+  changed_when: false
 
 - name: Set Gnome Shell version as parameter
   ansible.builtin.set_fact:
@@ -23,10 +23,10 @@
 - name: Install (font) packages
   ansible.builtin.apt:
     name: "{{ item }}"
-    update_cache: yes
-    install-recommends: no
+    update_cache: true
+    install-recommends: false
     state: present
-  become: yes
+  become: true
   loop: "{{ gnome_packages|default([]) }}"
 
 - name: Ensure that target directory exists
@@ -80,7 +80,7 @@
     - extensions
 
 - name: Create GNOME extension directories
-  file:
+  ansible.builtin.file:
     path: /home/{{ gnome_user }}/.local/share/gnome-shell/extensions/{{ item.name }}
     state: directory
   become_user: "{{ gnome_user }}"
@@ -94,7 +94,7 @@
   ansible.builtin.unarchive:
     src: "/tmp/{{ item.name }}.zip"
     dest: "/home/{{ gnome_user }}/.local/share/gnome-shell/extensions/{{ item.name }}"
-    remote_src: yes
+    remote_src: true
   become_user: "{{ gnome_user }}"
   loop: "{{ gnome_extensions_full|default([]) }}"
   loop_control:
