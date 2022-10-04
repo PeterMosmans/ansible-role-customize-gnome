@@ -1,0 +1,24 @@
+---
+# Pipeline template
+# Includes several jobs
+include:
+  # sast
+  - .gitlab/detect-secrets.gitlab-ci.yml
+  # sast
+  - .gitlab/sonarqube.gitlab-ci.yml
+  # sast
+  - .gitlab/ansible-lint.gitlab-ci.yml
+
+variables:
+  IMAGE_NAMESPACE: gofwd
+  IMAGE_REPOSITORY: ${IMAGE_NAMESPACE}/${CI_PROJECT_NAME}
+  IMAGE_TAG: ${CI_COMMIT_SHORT_SHA}
+  IMAGE_TAR: ${IMAGE_TAG}.tgz
+  JOB_FINGERPRINT: $CI_COMMIT_SHORT_SHA-$CI_PIPELINE_ID
+
+stages:
+  # security checks that don't need build
+  - sast
+
+.sast:
+  stage: sast
