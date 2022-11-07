@@ -24,6 +24,6 @@
     src: "{{ item }}"
     dest: /usr/local/share/fonts/
     remote_src: true
-  changed_when: false
+    mode: 0774
   become: true
   with_fileglob: "/tmp/{{ gnome_font.fonts|default([]) }}"
