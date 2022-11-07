@@ -1,14 +1,25 @@
 ---
 # Install a font from a ZIP file
-- name: Download and unzip font file
+- name: Download and unzip font file for {{ gnome_font.name }}
   ansible.builtin.unarchive:
     src: "{{ gnome_font.url }}"
     dest: "/tmp/"
     remote_src: true
+  # Unarchive module support the following extensions: .zip, .tar, .tar.gz, .tar.bz2, .tar.xz, and .tar.zst
+  when: "'.zip' in gnome_font.url or '.tar' in gnome_font.url"
   become: true
   changed_when: false
 
-- name: Install font
+# Install a font from a .ttf or .otf file
+- name: Download font file for {{ gnome_font.name }}
+  ansible.builtin.get_url:
+    url: "{{ gnome_font.url }}"
+    dest: "/tmp/"
+  when: "'.ttf' in gnome_font.url or '.otf' in gnome_font.url"
+  become: true
+  changed_when: false
+
+- name: Install font {{ gnome_font.name }}
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: /usr/local/share/fonts/
