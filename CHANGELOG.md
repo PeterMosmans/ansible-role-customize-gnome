@@ -1,5 +1,16 @@
 # Changelog
 
+### [0.2.9](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.8...0.2.9) (2022-11-15)
+
+### Bug Fixes
+
+- fallback to newer command for enabling extensions when older fails
+  ([976b4e2](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/976b4e2246a933f27bcb43a51e5c410b126862dd))
+- fallback to newer command for enabling extensions when older fails
+  ([9443a2f](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/9443a2fddcf7172a972099e2530fb58c29762049)),
+  closes
+  [#22](https://github.com/PeterMosmans/ansible-role-customize-gnome/issues/22)
+
 ### [0.2.8](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.7...0.2.8) (2022-10-04)
 
 ### Features
