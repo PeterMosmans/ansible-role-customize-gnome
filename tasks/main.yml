@@ -115,6 +115,19 @@
   tags:
     - settings
 
+- name: Enable extensions with newer command
+  ansible.builtin.command: gnome-extensions enable {{ item.item.name }}
+  become_user: "{{ gnome_user }}"
+  when:
+    - item.item.enable | default(false)
+    - "'gnome-shell-extension-tool is deprecated' in item.stderr"
+  loop: "{{ r_gnome_enable_extension.results | default([]) }}"
+  loop_control:
+    label: "{{ item.item.name }}"
+  changed_when: yes # Unfortunately the command does not return anything, so we can't know if it changed anything
+  tags:
+    - settings
+
 - name: Modify application settings using gsettings
   ansible.builtin.command:
     cmd: gsettings {{ ('--schemadir ' + item.schemadir) if 'schemadir' in item else '' }} set {{ item.schema }} {{ item.key }} {{ item.value }}
