@@ -1,5 +1,19 @@
 # Changelog
 
+### [0.2.10](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.9...0.2.10) (2022-11-15)
+
+### Features
+
+- support downloading font files directly
+  ([403951a](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/403951a803fdb19aa4792fb2f9f9a3b189ec687c))
+
+### Bug Fixes
+
+- copy single font files correctly
+  ([342c30f](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/342c30f11c179c15b065539521089f186799d650))
+- set correct mode on copied fonts
+  ([de88bc6](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/de88bc6e67d88e86a81d8b79dfb11e0212a9774c))
+
 ### [0.2.9](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.8...0.2.9) (2022-11-15)
 
 ### Bug Fixes
