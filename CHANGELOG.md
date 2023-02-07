@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.11](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.10...0.2.11) (2023-02-07)
+
+### Bug Fixes
+
+- fixes
+  [#25](https://github.com/PeterMosmans/ansible-role-customize-gnome/issues/25)
+  ([9cc4673](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/9cc467351836d61a1708a998c2cb80dadf1c808c))
+
 ### [0.2.10](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.9...0.2.10) (2022-11-15)
 
 ### Features
