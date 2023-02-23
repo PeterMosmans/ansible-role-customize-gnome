@@ -68,6 +68,9 @@
 - name: Create a list of current enabled extensions
   become_user: "{{ gnome_user }}"
   ansible.builtin.shell: gnome-extensions list --enabled > /tmp/before.txt
+  # Strangely enough this errors out when the list is empty
+  failed_when: false
+  changed_when: false
 
 - name: Load Gnome extension information
   include_tasks: get_extension_info.yml
@@ -143,6 +146,8 @@
 - name: Create a list of enabled extensions
   become_user: "{{ gnome_user }}"
   ansible.builtin.shell: gnome-extensions list --enabled > /tmp/after.txt
+  # Strangely enough this errors out when the list is empty
+  failed_when: false
   changed_when: false
 
 - name: Compare the list of enabled extensions
