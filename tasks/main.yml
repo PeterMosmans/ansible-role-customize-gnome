@@ -77,6 +77,7 @@
   ansible.builtin.get_url:
     url: "{{ item.url }}"
     dest: "/tmp/{{ item.name }}.zip"
+    mode: 0644
   loop: "{{ gnome_extensions_full|default([]) }}"
   loop_control:
     label: "{{ item.name }}"
