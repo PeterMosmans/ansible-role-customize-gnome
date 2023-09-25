@@ -68,6 +68,7 @@
 - name: Create a list of current enabled extensions
   become_user: "{{ gnome_user }}"
   ansible.builtin.shell: gnome-extensions list --enabled > /tmp/before.txt
+  changed_when: False
 
 - name: Load Gnome extension information
   include_tasks: get_extension_info.yml
@@ -83,6 +84,7 @@
     label: "{{ item.name }}"
   tags:
     - extensions
+  changed_when: False
 
 - name: Create GNOME extension directories
   ansible.builtin.file:
@@ -108,11 +110,11 @@
     - extensions
   register: unzipped_extension
 
-- name: Restart Gnome Shell to ensure all extensions are visible
-  become_user: "{{ gnome_user }}"
-  ansible.builtin.command:
-    cmd: killall -3 gnome-shell
-  when: unzipped_extension.changed
+#- name: Restart Gnome Shell to ensure all extensions are visible
+#  become_user: "{{ gnome_user }}"
+#  ansible.builtin.command:
+#    cmd: killall -3 gnome-shell
+#  when: unzipped_extension.changed
 
 - name: Enable extensions
   ansible.builtin.command: gnome-shell-extension-tool -e {{ item.name }}
@@ -136,7 +138,8 @@
   loop: "{{ r_gnome_enable_extension.results | default([]) }}"
   loop_control:
     label: "{{ item.item.name }}"
-  changed_when: yes # Unfortunately the command does not return anything, so we can't know if it changed anything
+  #changed_when: yes # Unfortunately the command does not return anything, so we can't know if it changed anything
+  changed_when: False
   tags:
     - settings
   ignore_errors: true
@@ -149,7 +152,7 @@
 - name: Compare the list of enabled extensions
   ansible.builtin.shell: diff --ignore-all-space /tmp/before.txt /tmp/after.txt|awk '/[<>]/{print $2}'
   register: difference
-  changed_when: false
+  changed_when: difference.rc != 0
 
 - debug:
     msg: "Changes in enabled extensions: {{ difference.stdout }}"
