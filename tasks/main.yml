@@ -69,6 +69,7 @@
   become_user: "{{ gnome_user }}"
   ansible.builtin.shell: gnome-extensions list --enabled > /tmp/before.txt
   changed_when: False
+  failed_when: False
 
 - name: Load Gnome extension information
   include_tasks: get_extension_info.yml
@@ -148,6 +149,7 @@
   become_user: "{{ gnome_user }}"
   ansible.builtin.shell: gnome-extensions list --enabled > /tmp/after.txt
   changed_when: false
+  failed_when: False
 
 - name: Compare the list of enabled extensions
   ansible.builtin.shell: diff --ignore-all-space /tmp/before.txt /tmp/after.txt|awk '/[<>]/{print $2}'
