@@ -1,2 +1,3 @@
 ---
 gnome_user: "{{ ansible_user_id }}"
+customize_gnome__skip_restart_gnome_shell: false
