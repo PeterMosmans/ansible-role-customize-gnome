@@ -133,7 +133,6 @@
   loop: "{{ r_gnome_enable_extension.results | default([]) }}"
   loop_control:
     label: "{{ item.item.name }}"
-  #changed_when: yes # Unfortunately the command does not return anything, so we can't know if it changed anything
   changed_when: False
   tags:
     - settings
