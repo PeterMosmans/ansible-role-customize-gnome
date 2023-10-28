@@ -111,6 +111,12 @@
     - extensions
   register: unzipped_extension
 
+- name: Restart Gnome Shell to ensure all extensions are visible
+  become_user: "{{ gnome_user }}"
+  ansible.builtin.command:
+    cmd: killall -3 gnome-shell
+  when: unzipped_extension.changed and not customize_gnome__skip_restart_gnome_shell
+
 - name: Enable extensions
   ansible.builtin.command: gnome-shell-extension-tool -e {{ item.name }}
   become_user: "{{ gnome_user }}"
