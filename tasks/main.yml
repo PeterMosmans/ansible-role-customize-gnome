@@ -65,9 +65,17 @@
   tags:
     - fonts
 
+- name: Create a temporary directory for extensions
+  ansible.builtin.tempfile:
+    state: directory
+  become_user: "{{ gnome_user }}"
+  register: customize_gnome_temp_dir
+  notify: Remove temporary directory for extensions
+  when: not ansible_check_mode
+
 - name: Create a list of current enabled extensions
   become_user: "{{ gnome_user }}"
-  ansible.builtin.shell: gnome-extensions list --enabled > /tmp/before.txt
+  ansible.builtin.shell: gnome-extensions list --enabled > "{{ customize_gnome_temp_dir.path }}/before.txt"
   changed_when: False
   failed_when: False
 
@@ -78,11 +86,12 @@
 - name: Download GNOME Shell extensions
   ansible.builtin.get_url:
     url: "{{ item.url }}"
-    dest: "/tmp/{{ item.name }}.zip"
+    dest: "{{ customize_gnome_temp_dir.path }}/{{ item.name }}.zip"
     mode: 0644
   loop: "{{ gnome_extensions_full|default([]) }}"
   loop_control:
     label: "{{ item.name }}"
+  become_user: "{{ gnome_user }}"
   tags:
     - extensions
   changed_when: False
@@ -100,7 +109,7 @@
 
 - name: Unzip GNOME extensions
   ansible.builtin.unarchive:
-    src: "/tmp/{{ item.name }}.zip"
+    src: "{{ customize_gnome_temp_dir.path }}/{{ item.name }}.zip"
     dest: "/home/{{ gnome_user }}/.local/share/gnome-shell/extensions/{{ item.name }}"
     remote_src: true
   become_user: "{{ gnome_user }}"
@@ -146,28 +155,19 @@
 
 - name: Create a list of enabled extensions
   become_user: "{{ gnome_user }}"
-  ansible.builtin.shell: gnome-extensions list --enabled > /tmp/after.txt
+  ansible.builtin.shell: gnome-extensions list --enabled > "{{ customize_gnome_temp_dir.path }}/after.txt"
   changed_when: false
   failed_when: False
 
 - name: Compare the list of enabled extensions
-  ansible.builtin.shell: diff --ignore-all-space /tmp/before.txt /tmp/after.txt|awk '/[<>]/{print $2}'
+  ansible.builtin.shell: diff --ignore-all-space "{{ customize_gnome_temp_dir.path }}/before.txt" "{{ customize_gnome_temp_dir.path }}/after.txt"|awk '/[<>]/{print $2}'
+
   register: difference
   changed_when: difference.rc != 0
 
 - debug:
     msg: "Changes in enabled extensions: {{ difference.stdout }}"
   when: difference.stdout
-
-- name: Clean up list
-  become_user: "{{ gnome_user }}"
-  ansible.builtin.file:
-    path: "{{ item }}"
-    state: absent
-  changed_when: false
-  loop:
-    - /tmp/before.txt
-    - /tmp/after.txt
 
 - name: Modify application settings using gsettings
   ansible.builtin.command:
