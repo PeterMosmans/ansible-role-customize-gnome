@@ -1,5 +1,55 @@
 # Changelog
 
+## [0.2.12](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.11...0.2.12) (2023-11-30)
+
+### Features
+
+- add option to skip restarting gnome shell
+  ([3094f62](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/3094f6294699ab48db2251f9653ed3f2abf56eef))
+
+### Bug Fixes
+
+- create and clean temp directory instead use of /tmp/
+  ([e780895](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/e780895458b7ad04b5704359d4e6970f1df50230))
+
+## [0.2.12](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.11...0.2.12) (2023-11-30)
+
+### Features
+
+- add option to skip restarting gnome shell
+  ([3094f62](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/3094f6294699ab48db2251f9653ed3f2abf56eef))
+
+### Bug Fixes
+
+- create and clean temp directory instead use of /tmp/
+  ([e780895](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/e780895458b7ad04b5704359d4e6970f1df50230))
+
+## [0.2.12](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.11...0.2.12) (2023-11-30)
+
+### Features
+
+- add option to skip restarting gnome shell
+  ([3094f62](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/3094f6294699ab48db2251f9653ed3f2abf56eef))
+
+### Bug Fixes
+
+- create and clean temp directory instead use of /tmp/
+  ([e780895](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/e780895458b7ad04b5704359d4e6970f1df50230))
+
+## [0.2.12](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.11...0.2.12) (2023-10-28)
+
+### Features
+
+- add option to skip restarting gnome shell
+  ([3094f62](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/3094f6294699ab48db2251f9653ed3f2abf56eef))
+
+## [0.2.12](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.11...0.2.12) (2023-10-28)
+
+### Features
+
+- add option to skip restarting gnome shell
+  ([3094f62](https://github.com/PeterMosmans/ansible-role-customize-gnome/commit/3094f6294699ab48db2251f9653ed3f2abf56eef))
+
 ## [0.2.11](https://github.com/PeterMosmans/ansible-role-customize-gnome/compare/0.2.10...0.2.11) (2023-02-07)
 
 ### Bug Fixes
