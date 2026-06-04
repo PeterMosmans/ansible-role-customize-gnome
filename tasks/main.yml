@@ -18,7 +18,7 @@
   ansible.builtin.debug:
     msg: "Sorry - no Gnome Shell detected... exiting"
   failed_when: true
-  when: not r_gnome_extension_parse_shell_version.stdout
+  when: not r_gnome_extension_parse_shell_version.stdout is truthy
 
 - name: Install (font) packages
   ansible.builtin.apt:
@@ -167,7 +167,7 @@
 
 - debug:
     msg: "Changes in enabled extensions: {{ difference.stdout }}"
-  when: difference.stdout
+  when: difference.stdout is truthy
 
 - name: Modify application settings using gsettings
   ansible.builtin.command:
@@ -185,7 +185,7 @@
     name: python3-psutil
     state: present
   become: true
-  when: gnome_dconf|default(false)
+  when: gnome_dconf is truthy
 
 - name: Modify application settings using dconf
   community.general.dconf:
